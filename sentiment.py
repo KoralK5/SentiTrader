@@ -24,10 +24,7 @@ def getSIA(text):
     sentiment= sia.polarity_scores(text)
     return sentiment
 
-def prepare_data(days=14, rerun=True):
-    if rerun:
-        get_data()
-
+def prepare_data(days=14):
     data = pd.read_csv("DJIA.csv")
     data2 = pd.read_csv("News.csv")
 
@@ -57,7 +54,6 @@ def prepare_data(days=14, rerun=True):
     merged_data = pd.merge(combined_news, data, on='Date', how='inner')
     merged_data = merged_data.sort_values(by='Date', ascending=False)
     final_df = merged_data.head(days)
-    final_df = final_df.drop(columns=['News'])
 
     final_df.to_csv('Data.csv', index=False)
 

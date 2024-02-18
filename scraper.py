@@ -5,6 +5,15 @@ from bs4 import BeautifulSoup
 import praw
 from datetime import datetime
 import pandas as pd
+from dotenv import find_dotenv, load_dotenv
+from os import environ as env
+
+ENV_FILE = find_dotenv()
+load_dotenv(ENV_FILE)
+
+# make sure to set these!
+API_KEY = env.get("REDDIT_KEY")
+SECRET_KEY = env.get('REDDIT_SECRET')
 
 def djia_fetcher(period1, period2):
     headers={'User-Agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/94.0.4606.61 Safari/537.36'}
@@ -46,8 +55,8 @@ def djia_fetcher(period1, period2):
 
 def news_fetcher():
     reddit = praw.Reddit(
-        client_id="uzmlxRTOsEkTGvSiblnnMQ",
-        client_secret="xanc6hsomgC52C9xSsKjVc4G58_dTw",
+        client_id=API_KEY,
+        client_secret=SECRET_KEY,
         user_agent="Scraper 1.0 by /u/PrettyDish9678",
     )
 
