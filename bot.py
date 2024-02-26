@@ -1,3 +1,5 @@
+# bot but multiple trades over time
+
 from alpaca.trading.client import TradingClient
 from alpaca.trading.enums import OrderSide, TimeInForce
 from alpaca.trading.requests import MarketOrderRequest
@@ -43,9 +45,6 @@ if __name__ == '__main__':
     print('Preparing Data...')
     prepare_data()
 
-    print('Placing Orders...')
+    print('Starting Bot...')
+    quantity = 100
     ai_trade()
-
-    print('Getting Order Status...')
-    get_status()
-
