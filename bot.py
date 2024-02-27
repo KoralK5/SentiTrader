@@ -8,6 +8,8 @@ from dotenv import find_dotenv, load_dotenv
 from os import environ as env
 from time import sleep
 from datetime import datetime
+import requests
+from bs4 import BeautifulSoup
 
 import ai
 import scraper
@@ -19,6 +21,41 @@ load_dotenv(ENV_FILE)
 API_KEY = env.get("ALPACA_KEY")
 SECRET_KEY = env.get('ALPACA_SECRET')
 client = TradingClient(API_KEY, SECRET_KEY, paper=True)
+
+def get_real_time_price():
+    headers = {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/94.0.4606.61 Safari/537.36'
+    }
+    url = "https://finance.yahoo.com/quote/%5EDJI"
+    try:
+        page = requests.get(url, headers=headers)
+        page.raise_for_status()
+    except requests.exceptions.HTTPError as e:
+        print("HTTP Error:", e)
+        return None
+    except requests.exceptions.ConnectionError as e:
+        print("Error Connecting:", e)
+        return None
+    except requests.exceptions.Timeout as e:
+        print("Timeout Error:", e)
+        return None
+    except requests.exceptions.RequestException as e:
+        print("Request exception: ", e)
+        return None
+
+    # Parsing & Organizing Data
+    soup = BeautifulSoup(page.content, "html.parser")
+    fin_streamer = soup.find("fin-streamer", {"data-symbol": "^DJI", "data-field": "regularMarketPrice"})
+    if not fin_streamer:
+        print("Real-time price element not found on the page.")
+        return None
+
+    real_time_price = fin_streamer.get("value")
+    if real_time_price:
+        return real_time_price
+    else:
+        print("Real-time price not found.")
+        return None
 
 def prepare_data():
     scraper.get_data()
@@ -60,7 +97,7 @@ trade_until = datetime(2024, 4, 1)  # end trades this day
 sleep_amount = 5 * 60               # 5 minutes
 long = -1                           # currently long (1) or short (0)
 m = 5                               # 5 minute interval
-n = 0.1                             # 10% invest
+n = 0.5                             # 50% invest
 if __name__ == '__main__':
     today = datetime.today()
     while today < trade_until:
@@ -74,16 +111,17 @@ if __name__ == '__main__':
         # make trade
         if long_pred != long:
             long = long_pred
-            assets = client.get_all_positions()
-            market_value = float(assets[0].market_value) / float(assets[0].qty)
+            # assets = client.get_all_positions()
+            # market_value = float(assets[0].market_value) / float(assets[0].qty)
+            market_value = float(get_real_time_price()) / 100
 
             client.close_all_positions(True)
 
             account = client.get_account()
             equity = float(account.equity)
             trade_cash = equity * n
-
             trade_shares = trade_cash // market_value
+
             place_order(long, trade_shares)
         else:
             print("No Status Change") # sleep
