@@ -1,4 +1,8 @@
 # bot but multiple trades over time
+def warn(*args, **kwargs):
+    pass
+import warnings
+warnings.warn = warn
 
 from alpaca.trading.client import TradingClient
 from alpaca.trading.enums import OrderSide, TimeInForce
@@ -94,7 +98,7 @@ def status():
     print('-------------------------\n')
 
 trade_until = datetime(2024, 4, 1)  # end trades this day
-sleep_amount = 5 * 60               # 5 minutes
+sleep_amount = 1 * 60               # 1 minute
 long = -1                           # currently long (1) or short (0)
 m = 5                               # 5 minute interval
 n = 0.5                             # 50% invest
@@ -110,13 +114,11 @@ if __name__ == '__main__':
 
         # make trade
         if long_pred != long:
-            long = long_pred
-            # assets = client.get_all_positions()
-            # market_value = float(assets[0].market_value) / float(assets[0].qty)
-            market_value = float(get_real_time_price()) / 100
-
             client.close_all_positions(True)
+            sleep(5)
 
+            long = long_pred
+            market_value = float(get_real_time_price()) / 100
             account = client.get_account()
             equity = float(account.equity)
             trade_cash = equity * n
