@@ -2,6 +2,9 @@
 
 SentiTrader is a high-frequency trading bot that utilizes sentiment analysis from news articles to make trading decisions. The bot scrapes r/worldnews and employs various machine learning models to predict stock market trends, testing its accuracy on an Alpaca paper trading account.
 
+![image](https://github.com/user-attachments/assets/7aa160de-ba9a-4c7f-99d5-01cfe0244e69)
+![image](https://github.com/user-attachments/assets/1cfc3f1c-a578-453d-a603-fd69c1fa39c0)
+
 ## Features
 - Web scraping news articles from r/worldnews for sentiment analysis.
 - Machine learning models (Random Forest, MLP, LDA) for predictive analysis.
