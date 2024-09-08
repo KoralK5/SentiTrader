@@ -2,7 +2,6 @@
 
 SentiTrader is a high-frequency trading bot that utilizes sentiment analysis from news articles to make trading decisions. The bot scrapes r/worldnews and employs various machine learning models to predict stock market trends, testing its accuracy on an Alpaca paper trading account.
 
-![image](https://github.com/user-attachments/assets/7aa160de-ba9a-4c7f-99d5-01cfe0244e69)
 ![image](https://github.com/user-attachments/assets/1cfc3f1c-a578-453d-a603-fd69c1fa39c0)
 
 ## Features
@@ -13,6 +12,8 @@ SentiTrader is a high-frequency trading bot that utilizes sentiment analysis fro
 
 ## Machine Learning Models
 The machine learning models used for this project, including Random Forest, MLP, and LDA, were developed and tuned based on sentiment analysis data. You can view the full implementation of the ML models [here](https://www.kaggle.com/code/koralkulacoglu/sentiment-analysis-stock-prediction/notebook).
+
+![image](https://github.com/user-attachments/assets/7aa160de-ba9a-4c7f-99d5-01cfe0244e69)
 
 ## Files
 - `ai.py`: Contains AI model and trading logic.
